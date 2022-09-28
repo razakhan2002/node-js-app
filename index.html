@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    h1 {
+        text-align: center;
+        color: rgb(97, 18, 18);
+        font-size: 55px;
+    }
+
+    h3 {
+        text-align: center;
+        color: brown;
+    }
+
+    form {
+        text-align: center;
+        color: rgb(44, 10, 10);
+        color: brown;
+    }
+
+    body {
+        background-color: rgb(15, 15, 15);
+    }
+
+    #cl {
+        margin-left: 50%;
+        display: inline-block;
+    }
+
+    button {
+        color: white;
+        background-color: rebeccapurple;
+    }
+</style>
+
+<body>
+    <h1>Todo App with server</h1> <br>
+
+    <form onsubmit="postTodo(); return false">
+        Todo: <input id="todo" type="text" required>
+        <button type="submit">Add</button><br>
+
+    </form>
+    <button id="cl" onclick="getAllTodos()">Refresh</button>
+
+    <button onclick="getDelete()">delete</button>
+
+    <h3 id="result"> </h3>
+
+    <script>
+        let api = 'https://brown-hat.cyclic.app/'
+
+
+        function postTodo() {
+            let todoText = document.querySelector("#todo").value
+            axios.post(`${api}todo`, {
+                text: todoText
+            })
+                .then(function (response) {
+                    console.log(response.data);
+
+                    document.querySelector("#result").innerHTML = ""
+
+                    response.data.data.map(eachTodo => {
+                        document.querySelector("#result").innerHTML += eachTodo
+                        document.querySelector("#result").innerHTML += '<br>'
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+        }
+
+        function getAllTodos() {
+            axios.get(`${api}todos`)
+                .then(function (response) {
+                    console.log(response.data);
+
+                    document.querySelector("#result").innerHTML = ""
+
+                    response.data.data.map(eachTodo => {
+                        document.querySelector("#result").innerHTML += eachTodo
+                        document.querySelector("#result").innerHTML += '<br>'
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+        function getDelete() {
+            console.log("asdfas")
+            axios.delete(`${api}del`).then(function (response) {
+                document.querySelector("#result").innerHTML = ''
+
+            }).catch((error) => {
+                console.log(error)
+            })
+        }
+        getAllTodos();
+
+        setInterval(getAllTodos, 1000);
+
+    </script>
+
+
+</body>
+
+</html>
